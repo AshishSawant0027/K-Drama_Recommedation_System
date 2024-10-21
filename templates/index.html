@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Drama Recommender</title>
+    <style>
+        body {
+            background-image: url('https://image.tmdb.org/t/p/original/onxOihBXwenI3ZjSM8ivaLx0gt2.jpg');
+            background-size: cover;
+
+            background-repeat: no-repeat;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input, select {
+            padding: 10px;
+            font-size: 1.2rem;
+        }
+        button {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .recommendations {
+            margin-top: 30px;
+            display: flex;
+            justify-content: start;
+            flex-wrap: nowrap; /* Prevent wrapping */
+            overflow-x: auto; /* Allows horizontal scrolling */
+            white-space: nowrap; /* Ensure the items stay in a single line */
+        }
+        .col {
+            display: inline-block; /* Force items to behave like inline blocks */
+            margin: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            margin: 10px;
+        }
+        .col p {
+            margin-top: 10px; /* Space between image and text */
+        }
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>K-Drama Recommender</h1>
+
+    <form method="POST">
+        <label for="kd_selection">Select a K-Drama:</label><br>
+        <select id="kd_selection" name="kd_selection">
+            {% for kd in kd_list %}
+            <option value="{{ kd }}">{{ kd }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Show Recommendations</button>
+    </form>
+
+    <div class="recommendations">
+        {% if recommended_kd_names %}
+        <div class="row">
+            {% for name, poster, tmdb_id in zip(recommended_kd_names, recommended_kd_posters, tmdb_ids) %}
+            <div class="col">
+                <a href="/{{ tmdb_id }}"><img src="{{ poster }}" alt="{{ name }}"></a>
+                <p>{{ name }}</p>  <!-- Name below the poster -->
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    {% if recommended_kd_names %}
+    <a href="/">Clear Result</a>
+    {% endif %}
+</body>
+</html>
